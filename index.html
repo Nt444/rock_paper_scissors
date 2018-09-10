@@ -1,0 +1,88 @@
+
+    <!doctype html>
+    <html>
+    <head>
+        <title>Rock Paper Scissors</title>
+    </head>
+    <body>
+        <script>
+            const R = 'rock';
+            const P = 'paper';
+            const S = 'scissors';
+
+            const winMessage = 'You Win!';
+            const loseMessage = 'You Lose!';
+            const drawMessage = 'Draw!';
+
+            function computerPlay() {
+                let x = Math.floor(Math.random() * 3);
+                switch(x) {
+                    case 0: return R;
+                    case 1: return P;
+                    case 2: return S;
+                }
+                throw 'computerPlay random error';
+            }
+
+            function toTitleCase(str) {
+                return str.replace(/\w\S*/g, function(txt){
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                });
+            }
+
+            let table = {};
+            table[R] = 0;
+            table[P] = 1;
+            table[S] = 2;
+
+            function play(user, comp) {
+                user = user.toLowerCase();
+                if (user != R && user != P && user != S)
+                    throw 'wrong input';
+
+                let userTitleCase = toTitleCase(user);
+                let compTitleCase = toTitleCase(comp);
+
+                let diff = table[user] - table[comp];
+                return diff == 0
+                    ? drawMessage + ' ' + userTitleCase + ' vs ' + compTitleCase
+                    : (diff > 0
+                        ? winMessage + ' ' + userTitleCase + ' beats ' + compTitleCase
+                        : loseMessage + ' ' + compTitleCase + ' beats ' + userTitleCase
+                    );
+            }
+
+            let victories;
+            let defeats;
+
+            function getResultMessage(message) {
+                return message + ' Victories ' + victories + ' Defeats ' + defeats;
+            }
+            
+            function game() {
+                let input = window.prompt('Enter Rock Paper or Scissors');
+
+                victories = 0;
+                defeats = 0;
+                for (i = 0; i < 5; i++) {
+                    let playResult = play(input, computerPlay());
+                    console.log(playResult);
+
+                    if (playResult.includes(winMessage)) victories++;
+                    if (playResult.includes(loseMessage)) defeats++;
+                }
+
+                let result = victories == defeats
+                    ? drawMessage
+                    : (victories > defeats 
+                        ? winMessage
+                        : loseMessage
+                    );
+
+                console.log(getResultMessage(result));
+            }
+
+            game();
+        </script>
+    </body>
+    </html>
