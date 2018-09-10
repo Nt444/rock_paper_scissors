@@ -46,7 +46,7 @@
                 let diff = table[user] - table[comp];
                 return diff == 0
                     ? drawMessage + ' ' + userTitleCase + ' vs ' + compTitleCase
-                    : (diff > 0
+                    : (diff == 1 || diff == -2
                         ? winMessage + ' ' + userTitleCase + ' beats ' + compTitleCase
                         : loseMessage + ' ' + compTitleCase + ' beats ' + userTitleCase
                     );
