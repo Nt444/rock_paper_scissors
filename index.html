@@ -3,8 +3,21 @@
     <html>
     <head>
         <title>Rock Paper Scissors</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
+        <div class="container">
+            <div class="buttons">
+                <button id="rock">Rock</button>
+                <button id="paper">Paper</button>
+                <button id="scissors">Scissors</button>
+            </div>
+            <div id="log">
+            </div>
+            <div id="result">
+            </div>
+        </div>
+
         <script>
             const R = 'rock';
             const P = 'paper';
@@ -13,6 +26,11 @@
             const winMessage = 'You Win!';
             const loseMessage = 'You Lose!';
             const drawMessage = 'Draw!';
+
+            [R, P, S].forEach(x => {
+                const btn = document.querySelector('#' + x);
+                btn.addEventListener('click', () => { game(x); });
+            });
 
             function computerPlay() {
                 let x = Math.floor(Math.random() * 3);
@@ -59,18 +77,19 @@
                 return message + ' Victories ' + victories + ' Defeats ' + defeats;
             }
             
-            function game() {
-                let input = window.prompt('Enter Rock Paper or Scissors');
+            victories = 0;
+            defeats = 0;
 
-                victories = 0;
-                defeats = 0;
-                for (i = 0; i < 5; i++) {
-                    let playResult = play(input, computerPlay());
-                    console.log(playResult);
+            function game(input) {
+                let playResult = play(input, computerPlay());
 
-                    if (playResult.includes(winMessage)) victories++;
-                    if (playResult.includes(loseMessage)) defeats++;
-                }
+                const log = document.querySelector('#log');
+                const logLine = document.createElement('p');
+                logLine.innerText = playResult;
+                log.appendChild(logLine);
+
+                if (playResult.includes(winMessage)) victories++;
+                if (playResult.includes(loseMessage)) defeats++;
 
                 let result = victories == defeats
                     ? drawMessage
@@ -79,10 +98,17 @@
                         : loseMessage
                     );
 
-                console.log(getResultMessage(result));
-            }
+                if (victories >= 5 || defeats >= 5) {
+                    const msg = getResultMessage(result);
+                    const resultTag = document.querySelector('#result');
+                    resultTag.innerText = msg;
 
-            game();
+                    const buttons = document.querySelectorAll('.buttons button');
+                    buttons.forEach((btn) => {
+                        btn.disabled = true;
+                    });
+                }
+            }
         </script>
     </body>
     </html>
